@@ -6,42 +6,48 @@
     <title>挑战中 - PK挑战赛</title>
     <style>
         :root {
-            --primary: #1677FF; /* 作业帮蓝色 */
-            --primary-light: #4096FF;
-            --success: #52C41A;
-            --error: #FF4D4F;
-            --warning: #FAAD14;
-            --bg: #FFFFFF;
+            --primary: #4F46E5;
+            --primary-light: #818CF8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --bg: #F8FAFC;
             --card-bg: #FFFFFF;
-            --text: #262626;
-            --text-light: #8C8C8C;
-            --math-color: #1677FF; /* 数学蓝色 */
-            --chinese-color: #FF4D4F; /* 语文红色 */
-            --english-color: #52C41A; /* 英语绿色 */
-            --border: #F0F0F0;
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-            --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --text: #1E293B;
+            --text-light: #64748B;
+            --math-color: #EC4899;
+            --chinese-color: #F59E0B;
+            --english-color: #3B82F6;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-            background: linear-gradient(135deg, #E6F4FF 0%, #F0F8FF 100%);
+            background: var(--bg);
             min-height: 100vh;
             color: var(--text);
-            margin: 0;
-            padding: 0;
         }
 
-        /* 顶部导航 - 作业帮风格 */
+        /* 顶部导航 */
         .header {
-            background: linear-gradient(135deg, #1677FF 0%, #4096FF 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
             color: white;
-            padding: 20px 0;
+            padding: 15px 20px;
             text-align: center;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
             position: relative;
-            box-shadow: 0 2px 8px rgba(22, 119, 255, 0.15);
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
         }
 
         .header-content {
@@ -73,45 +79,44 @@
         }
 
         .header h1 {
-            font-size: 22px;
-            font-weight: 600;
+            font-size: 20px;
+            font-weight: 700;
         }
 
         .user-badge {
             background: rgba(255,255,255,0.2);
-            padding: 6px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
         }
 
-        /* 主容器 - 作业帮风格 */
+        /* 主容器 */
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 20px;
         }
 
-        /* 游戏区域 - 作业帮风格 */
+        /* 游戏区域 */
         .game-area {
-            background: white;
-            border-radius: 12px;
-            padding: 32px;
-            box-shadow: var(--shadow);
-            min-height: 500px;
-            border: 1px solid var(--border);
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            min-height: 400px;
         }
 
-        /* 统计栏 - 作业帮风格 */
+        /* 统计栏 */
         .stats-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 32px;
-            padding: 20px 24px;
-            background: #F5F8FF;
-            border-radius: 8px;
-            border: 1px solid #D6E4FF;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #F1F5F9;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
         }
 
         .stat-item {
@@ -128,7 +133,7 @@
             transform: translateY(-50%);
             height: 30px;
             width: 1px;
-            background: #D6E4FF;
+            background: #e2e8f0;
         }
 
         .stat-value {
@@ -145,24 +150,25 @@
         .stat-value.time { color: var(--warning); }
 
         .stat-label {
-            font-size: 14px;
-            color: #8C8C8C;
-            font-weight: 500;
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* 进度条 - 作业帮风格 */
+        /* 进度条 */
         .progress-bar {
-            height: 8px;
-            background: #F0F0F0;
-            border-radius: 4px;
-            margin-bottom: 32px;
+            height: 10px;
+            background: #E2E8F0;
+            border-radius: 5px;
+            margin-bottom: 25px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #1677FF, #4096FF);
-            border-radius: 4px;
+            background: linear-gradient(90deg, var(--success), #34d399, var(--primary-light));
+            border-radius: 5px;
             transition: width 0.3s ease;
         }
 
@@ -202,7 +208,10 @@
 
         .question-text.math { 
             font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, monospace; 
-            color: #1677FF;
+            background: linear-gradient(135deg, var(--primary), var(--english-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* 选择按钮 */
@@ -218,36 +227,36 @@
         .options.cols-4 { grid-template-columns: repeat(4, 1fr); }
 
         .option-btn {
-            background: white;
-            border: 2px solid #F0F0F0;
-            border-radius: 8px;
+            background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
             padding: 20px;
             font-size: 24px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, monospace;
-            color: var(--text);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .option-btn:hover {
-            border-color: #1677FF;
-            background: #F5F8FF;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            border-color: var(--primary-light);
+            background: linear-gradient(145deg, #eef2ff 0%, #e0e7ff 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(79, 70, 229, 0.2);
         }
 
         .option-btn.correct {
-            background: #52C41A;
+            background: linear-gradient(145deg, #10b981 0%, #059669 100%);
             color: white;
-            border-color: #52C41A;
+            border-color: #059669;
             animation: correctPop 0.4s ease;
         }
 
         .option-btn.wrong {
-            background: #FF4D4F;
+            background: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
             color: white;
-            border-color: #FF4D4F;
+            border-color: #dc2626;
             animation: wrongShake 0.4s ease;
         }
 
@@ -275,43 +284,38 @@
 
         .input-area input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 15px 20px;
             font-size: 24px;
             text-align: center;
-            border: 2px solid #F0F0F0;
-            border-radius: 8px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--text);
+            border: 3px solid #E2E8F0;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-bottom: 15px;
         }
 
         .input-area input::placeholder {
-            color: #BFBFBF;
+            color: rgba(0, 0, 0, 0.32);
         }
 
         .input-area input:focus {
             outline: none;
-            border-color: #1677FF;
-            box-shadow: 0 0 0 2px rgba(22, 119, 255, 0.1);
+            border-color: var(--primary);
         }
 
         .submit-btn {
             width: 100%;
-            padding: 16px;
-            background: #1677FF;
+            padding: 15px;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
-        .submit-btn:hover { 
-            background: #4096FF; 
-            box-shadow: 0 4px 12px rgba(22, 119, 255, 0.3);
-        }
+        .submit-btn:hover { background: #4338CA; }
 
         /* 单词连线 */
         .matching-area {
@@ -328,22 +332,19 @@
         }
 
         .matching-item {
-            padding: 16px;
-            background: white;
-            border: 2px solid #F0F0F0;
-            border-radius: 8px;
+            padding: 15px;
+            background: #F1F5F9;
+            border: 2px solid #E2E8F0;
+            border-radius: 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
             font-weight: 500;
-            color: var(--text);
         }
 
         .matching-item:hover {
-            background: #F6FFED;
-            border-color: #52C41A;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow);
+            background: #EEF2FF;
+            border-color: var(--primary-light);
         }
 
         .matching-item.selected {
@@ -440,12 +441,11 @@
 
         .result-stat {
             text-align: center;
-            padding: 20px 24px;
+            padding: 15px 25px;
             background: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             min-width: 100px;
-            border: 1px solid var(--border);
         }
 
         .result-stat-value {
@@ -501,85 +501,13 @@
 
         .action-btn.primary:hover { background: #4338CA; }
 
-        /* 模块主题样式 */
-        body.math { background: linear-gradient(135deg, #E6F4FF 0%, #F0F8FF 100%); }
-        body.english { background: linear-gradient(135deg, #F6FFED 0%, #E9FFD9 100%); }
-        body.chinese { background: linear-gradient(135deg, #FFF2F0 0%, #FFE6E6 100%); }
-
-        .header.math { background: linear-gradient(135deg, #1677FF 0%, #4096FF 100%); }
-        .header.english { background: linear-gradient(135deg, #52C41A 0%, #73D13D 100%); }
-        .header.chinese { background: linear-gradient(135deg, #FF4D4F 0%, #FF7875 100%); }
-
-        .question-text.math { color: #1677FF; }
-        .question-text.english { color: #52C41A; }
-        .question-text.chinese { color: #FF4D4F; }
-
-        /* 诗词卷轴样式 */
-        .poetry-scroll {
-            background: linear-gradient(135deg, #FFF2F0 0%, #FFE6E6 100%);
-            border: 2px solid #FFA39E;
-            border-radius: 12px;
-            padding: 30px 40px;
-            margin: 20px auto 40px;
-            max-width: 600px;
-            position: relative;
-            box-shadow: 0 4px 16px rgba(255, 77, 79, 0.15);
-        }
-
-        .poetry-scroll::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #FF4D4F, #FF7875, #FF4D4F);
-            border-radius: 12px 12px 0 0;
-        }
-
-        .poetry-scroll::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #FF4D4F, #FF7875, #FF4D4F);
-            border-radius: 0 0 12px 12px;
-        }
-
-        .poetry-text {
-            font-size: 24px;
-            line-height: 1.8;
-            text-align: center;
-            color: #262626;
-            font-weight: 500;
-        }
-
-        .poetry-hint {
-            font-size: 16px;
-            color: #8C8C8C;
-            text-align: center;
-            margin-top: 10px;
-            font-style: italic;
-        }
-
-        /* 响应式 - 作业帮风格 */
-        @media (max-width: 768px) {
-            .container { padding: 20px 16px; }
-            .game-area { padding: 24px 20px; }
-            .question-text { font-size: 28px; }
-            .option-btn { padding: 16px; font-size: 20px; }
-            .options { grid-template-columns: 1fr; }
-            .matching-area { flex-direction: column; }
-            .header-content { flex-direction: column; gap: 12px; }
-            .stats-bar { flex-direction: column; gap: 16px; }
-        }
-        
-        @media (max-width: 480px) {
+        /* 响应式 */
+        @media (max-width: 600px) {
             .question-text { font-size: 24px; }
-            .option-btn { padding: 14px; font-size: 18px; }
-            .header h1 { font-size: 20px; }
+            .option-btn { font-size: 18px; padding: 15px; }
+            .options { grid-template-columns: repeat(2, 1fr); }
+            .matching-area { flex-direction: column; }
+            .header-content { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
@@ -705,10 +633,6 @@
             gameState.module = params.get('module') || 'math';
             gameState.subModule = params.get('subModule') || 'compare';
             gameState.userName = params.get('userName') || '匿名';
-
-            // 应用模块主题
-            document.body.classList.add(gameState.module);
-            document.querySelector('.header').classList.add(gameState.module);
 
             // 更新页面标题
             const modeName = MODULE_NAMES[`${gameState.module}-${gameState.subModule}`] || '挑战';
@@ -934,13 +858,11 @@
             return `
                 <div class="question-area">
                     <div class="question-number">第 ${gameState.currentQuestion + 1} 题 - 诗词补</div>
-                    <div class="poetry-scroll">
-                        <div class="poetry-text">"${q.text}"</div>
-                        <div class="poetry-hint">${q.part === '上句' ? '补下句' : '补上句'}</div>
-                    </div>
+                    <div class="question-text" style="font-size:22px;">${q.part === '上句' ? '补下句：' : '补上句：'}</div>
+                    <div class="question-text math" style="font-size:26px;margin-top:15px;">"${q.text}"</div>
                 </div>
                 <div class="input-area">
-                    <input type="text" id="poetryInput" placeholder="请填写诗词的下句/上句" onkeypress="if(event.key==='Enter')checkPoetryAnswer()">
+                    <input type="text" id="poetryInput" placeholder="请填写答案" onkeypress="if(event.key==='Enter')checkPoetryAnswer()">
                     <button class="submit-btn" onclick="checkPoetryAnswer()">确定</button>
                 </div>
             `;
