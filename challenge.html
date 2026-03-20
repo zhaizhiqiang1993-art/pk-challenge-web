@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>挑战中 - PK挑战赛</title>
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-light: #818CF8;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --bg: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --math-color: #EC4899;
+            --chinese-color: #F59E0B;
+            --english-color: #3B82F6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+        }
+
+        /* 顶部导航 */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #7C3AED 100%);
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+        }
+
+        .header-content {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: none;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .user-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 游戏区域 */
+        .game-area {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            min-height: 400px;
+        }
+
+        /* 统计栏 */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #F1F5F9;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 15px 20px;
+            border-radius: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .stat-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 30px;
+            width: 1px;
+            background: #e2e8f0;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, monospace;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-value.score { color: var(--success); }
+        .stat-value.time { color: var(--warning); }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            height: 10px;
+            background: #E2E8F0;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), #34d399, var(--primary-light));
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        /* 题目区域 */
+        .question-area {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        .question-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--success));
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .question-text {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .question-text.math { 
+            font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, monospace; 
+            background: linear-gradient(135deg, var(--primary), var(--english-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 选择按钮 */
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .options.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .options.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        .option-btn {
+            background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, monospace;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary-light);
+            background: linear-gradient(145deg, #eef2ff 0%, #e0e7ff 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(79, 70, 229, 0.2);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(145deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-color: #059669;
+            animation: correctPop 0.4s ease;
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border-color: #dc2626;
+            animation: wrongShake 0.4s ease;
+        }
+
+        .option-btn.disabled { pointer-events: none; }
+
+        @keyframes correctPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+
+        /* 输入区域 */
+        .input-area {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .input-area input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 24px;
+            text-align: center;
+            border: 3px solid #E2E8F0;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .input-area input::placeholder {
+            color: rgba(0, 0, 0, 0.32);
+        }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover { background: #4338CA; }
+
+        /* 单词连线 */
+        .matching-area {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .matching-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .matching-item {
+            padding: 15px;
+            background: #F1F5F9;
+            border: 2px solid #E2E8F0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .matching-item:hover {
+            background: #EEF2FF;
+            border-color: var(--primary-light);
+        }
+
+        .matching-item.selected {
+            background: #C7D2FE;
+            border-color: var(--primary);
+        }
+
+        .matching-item.matched {
+            background: #D1FAE5;
+            border-color: var(--success);
+            opacity: 0.6;
+        }
+
+        /* 听音选词 */
+        .audio-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--english-color);
+            color: white;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover { transform: scale(1.1); }
+        .audio-btn.playing { animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+        }
+
+        /* 结果页面 */
+        .result-area {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .result-icon { font-size: 80px; margin-bottom: 20px; animation: iconPop 0.6s ease; }
+
+        @keyframes iconPop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .result-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .result-score {
+            font-size: 56px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--success), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 20px 0;
+            font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, monospace;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .result-stat {
+            text-align: center;
+            padding: 15px 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            min-width: 100px;
+        }
+
+        .result-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .result-stat-label {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        .my-rank {
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(135deg,#FEF3C7,#FDE68A);
+            border-radius: 12px;
+        }
+
+        .my-rank div { font-size: 16px; font-weight: 700; }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn.primary:hover { background: #4338CA; }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            .question-text { font-size: 24px; }
+            .option-btn { font-size: 18px; padding: 15px; }
+            .options { grid-template-columns: repeat(2, 1fr); }
+            .matching-area { flex-direction: column; }
+            .header-content { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="goBack()">← 返回</button>
+            <h1 id="modeTitle">PK挑战赛</h1>
+            <div class="user-badge" id="userBadge">👤 用户</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="game-area" id="gameArea"></div>
+    </div>
+
+    <script>
+        // ==================== 游戏数据 ====================
+        const GAME_CONFIG = { totalQuestions: 10 };
+        const LEADERBOARD_KEY = 'pkChallengeLeaderboard';
+
+        const MODULE_NAMES = {
+            'math-compare': '比大小', 'math-addsub': '加减法', 'math-multidiv': '乘除法',
+            'chinese-idiom': '成语填词', 'chinese-poetry': '诗词补',
+            'english-match': '单词连连看', 'english-listen': '听音选词'
+        };
+
+        const idioms = [
+            { clue: "形容说话办事有理有据", answer: "理直气壮" },
+            { clue: "形容非常细小的东西", answer: "微不足道" },
+            { clue: "形容精神旺盛,容光焕发", answer: "神采奕奕" },
+            { clue: "形容数量很多", answer: "不计其数" },
+            { clue: "形容注意力高度集中", answer: "全神贯注" },
+            { clue: "形容变化很大", answer: "面目全非" },
+            { clue: "形容天气晴朗", answer: "风和日丽" },
+            { clue: "形容容易办到", answer: "轻而易举" },
+            { clue: "形容举动谨慎小心", answer: "小心翼翼" },
+            { clue: "形容心里七上八下", answer: "忐忑不安" },
+            { clue: "形容秩序混乱", answer: "乱作一团" },
+            { clue: "形容力量强大", answer: "势不可挡" },
+            { clue: "形容十分拥挤", answer: "水泄不通" },
+            { clue: "形容没有消息", answer: "石沉大海" },
+            { clue: "形容非常担心", answer: "忧心忡忡" }
+        ];
+
+        const poems = [
+            { part: "上句", text: "举头望明月", answer: "低头思故乡" },
+            { part: "上句", text: "春眠不觉晓", answer: "处处闻啼鸟" },
+            { part: "上句", text: "白日依山尽", answer: "黄河入海流" },
+            { part: "上句", text: "少壮不努力", answer: "老大徒伤悲" },
+            { part: "上句", text: "谁知盘中餐", answer: "粒粒皆辛苦" },
+            { part: "上句", text: "红豆生南国", answer: "春来发几枝" },
+            { part: "上句", text: "床前明月光", answer: "疑是地上霜" },
+            { part: "下句", text: "低头思故乡", answer: "举头望明月" },
+            { part: "下句", text: "处处闻啼鸟", answer: "春眠不觉晓" },
+            { part: "下句", text: "黄河入海流", answer: "白日依山尽" },
+            { part: "下句", text: "粒粒皆辛苦", answer: "谁知盘中餐" },
+            { part: "下句", text: "野火烧不尽", answer: "春风吹又生" },
+            { part: "下句", text: "欲穷千里目", answer: "更上一层楼" }
+        ];
+
+        const words = [
+            { word: "apple", meaning: "苹果" }, { word: "banana", meaning: "香蕉" },
+            { word: "orange", meaning: "橙子" }, { word: "grape", meaning: "葡萄" },
+            { word: "water", meaning: "水" }, { word: "milk", meaning: "牛奶" },
+            { word: "bread", meaning: "面包" }, { word: "rice", meaning: "米饭" },
+            { word: "book", meaning: "书" }, { word: "pen", meaning: "钢笔" },
+            { word: "dog", meaning: "狗" }, { word: "cat", meaning: "猫" },
+            { word: "fish", meaning: "鱼" }, { word: "bird", meaning: "鸟" },
+            { word: "tree", meaning: "树" }, { word: "flower", meaning: "花" },
+            { word: "sun", meaning: "太阳" }, { word: "moon", meaning: "月亮" },
+            { word: "star", meaning: "星星" }, { word: "car", meaning: "汽车" }
+        ];
+
+        // ==================== 游戏状态 ====================
+        let gameState = {
+            userName: '',
+            module: 'math',
+            subModule: 'compare',
+            currentQuestion: 0,
+            score: 0,
+            correctCount: 0,
+            startTime: 0,
+            questions: [],
+            matchedPairs: [],
+            isAnswered: false,
+            timerInterval: null
+        };
+
+        // ==================== 榜单管理 ====================
+        function getLeaderboard() {
+            const data = localStorage.getItem(LEADERBOARD_KEY);
+            return data ? JSON.parse(data) : [];
+        }
+
+        function saveToLeaderboard(entry) {
+            const leaderboard = getLeaderboard();
+            leaderboard.push({ ...entry, timestamp: Date.now() });
+            const best = {};
+            leaderboard.forEach(item => {
+                const key = `${item.userName}-${item.module}-${item.subModule}`;
+                if (!best[key] || item.totalScore > best[key].totalScore) best[key] = item;
+            });
+            localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(Object.values(best)));
+        }
+
+        function getFilteredLeaderboard(module, subModule) {
+            return getLeaderboard()
+                .filter(item => item.module === module && item.subModule === subModule)
+                .sort((a, b) => b.totalScore - a.totalScore)
+                .slice(0, 10);
+        }
+
+        function calculateTotalScore(correctCount, totalQuestions, timeUsed) {
+            const accuracy = (correctCount / totalQuestions) * 100;
+            const speedBonus = Math.max(0, Math.min(60, (30 - timeUsed) * 2));
+            return Math.round(accuracy + speedBonus);
+        }
+
+        // ==================== 初始化 ====================
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            gameState.module = params.get('module') || 'math';
+            gameState.subModule = params.get('subModule') || 'compare';
+            gameState.userName = params.get('userName') || '匿名';
+
+            // 更新页面标题
+            const modeName = MODULE_NAMES[`${gameState.module}-${gameState.subModule}`] || '挑战';
+            document.getElementById('modeTitle').textContent = modeName;
+            document.getElementById('userBadge').textContent = '👤 ' + gameState.userName;
+            document.title = modeName + ' - PK挑战赛';
+
+            startGame();
+        };
+
+        // ==================== 游戏逻辑 ====================
+        function startGame() {
+            stopTimer();
+            gameState.currentQuestion = 0;
+            gameState.score = 0;
+            gameState.correctCount = 0;
+            gameState.startTime = Date.now();
+            gameState.questions = generateQuestions();
+            gameState.matchedPairs = [];
+            gameState.isAnswered = false;
+
+            renderGame();
+            updateTimerDisplay();
+            gameState.timerInterval = setInterval(updateTimerDisplay, 1000);
+        }
+
+        function stopTimer() {
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+                gameState.timerInterval = null;
+            }
+        }
+
+        function updateTimerDisplay() {
+            const timeEl = document.getElementById('timeDisplay');
+            if (timeEl && gameState.startTime) {
+                const seconds = Math.floor((Date.now() - gameState.startTime) / 1000);
+                timeEl.textContent = seconds + 's';
+            }
+        }
+
+        // 输入框回车提交
+        function handleInputKeypress(e, checkFunc) {
+            if (e.key === 'Enter') checkFunc();
+        }
+
+        function generateQuestions() {
+            const questions = [];
+            const { module, subModule } = gameState;
+
+            if (module === 'math') {
+                if (subModule === 'compare') {
+                    for (let i = 0; i < GAME_CONFIG.totalQuestions; i++) {
+                        const a = Math.floor(Math.random() * 20);
+                        const b = Math.floor(Math.random() * 20);
+                        const val1 = Math.floor(Math.random() * 30);
+                        const val2 = a + b;
+                        questions.push({
+                            type: 'compare',
+                            left: val1,
+                            right: val2,
+                            answer: val1 > val2 ? '>' : (val1 < val2 ? '<' : '=')
+                        });
+                    }
+                } else if (subModule === 'addsub') {
+                    for (let i = 0; i < GAME_CONFIG.totalQuestions; i++) {
+                        const a = Math.floor(Math.random() * 20) + 1;
+                        const b = Math.floor(Math.random() * (21 - a));
+                        const isAdd = Math.random() > 0.5;
+                        const q = isAdd ? `${a} + ${b} = ?` : `${a + b} - ${b} = ?`;
+                        const answer = isAdd ? a + b : a;
+                        questions.push({ type: 'calc', question: q, answer: answer, options: generateOptions(answer, 20) });
+                    }
+                } else if (subModule === 'multidiv') {
+                    for (let i = 0; i < GAME_CONFIG.totalQuestions; i++) {
+                        const a = Math.floor(Math.random() * 9) + 1;
+                        const b = Math.floor(Math.random() * 9) + 1;
+                        const isMul = Math.random() > 0.5;
+                        if (isMul) {
+                            questions.push({ type: 'calc', question: `${a} × ${b} = ?`, answer: a * b, options: generateOptions(a * b, 81) });
+                        } else {
+                            questions.push({ type: 'calc', question: `${a * b} ÷ ${a} = ?`, answer: b, options: generateOptions(b, 9) });
+                        }
+                    }
+                }
+            } else if (module === 'chinese') {
+                if (subModule === 'idiom') {
+                    const shuffled = [...idioms].sort(() => Math.random() - 0.5);
+                    for (let i = 0; i < GAME_CONFIG.totalQuestions; i++) {
+                        questions.push({ type: 'idiom', clue: shuffled[i].clue, answer: shuffled[i].answer });
+                    }
+                } else if (subModule === 'poetry') {
+                    const shuffled = [...poems].sort(() => Math.random() - 0.5);
+                    for (let i = 0; i < GAME_CONFIG.totalQuestions; i++) {
+                        questions.push({ type: 'poetry', part: shuffled[i].part, text: shuffled[i].text, answer: shuffled[i].answer });
+                    }
+                }
+            } else if (module === 'english') {
+                if (subModule === 'match') {
+                    const shuffled = [...words].sort(() => Math.random() - 0.5).slice(0, 6);
+                    questions.push({ type: 'match', pairs: shuffled.map(w => ({ word: w.word, meaning: w.meaning })) });
+                } else if (subModule === 'listen') {
+                    const shuffled = [...words].sort(() => Math.random() - 0.5);
+                    for (let i = 0; i < GAME_CONFIG.totalQuestions; i++) {
+                        const correct = shuffled[i];
+                        const others = shuffled.filter(w => w.word !== correct.word).slice(0, 3);
+                        const options = [correct, ...others].sort(() => Math.random() - 0.5);
+                        questions.push({ type: 'listen', word: correct.word, answer: correct.word, options: options.map(o => o.word) });
+                    }
+                }
+            }
+            return questions;
+        }
+
+        function generateOptions(answer, max) {
+            const options = new Set([answer]);
+            while (options.size < 4) {
+                options.add(Math.floor(Math.random() * max) + 1);
+            }
+            return [...options].sort(() => Math.random() - 0.5);
+        }
+
+        function renderGame() {
+            const gameArea = document.getElementById('gameArea');
+            const { module, subModule, currentQuestion, questions } = gameState;
+
+            if (module === 'english' && subModule === 'match') {
+                if (gameState.matchedPairs.length === questions[0].pairs.length) {
+                    showResult();
+                    return;
+                }
+            } else {
+                if (currentQuestion >= questions.length) {
+                    showResult();
+                    return;
+                }
+            }
+
+            let html = `
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="stat-value">${currentQuestion + 1}/${questions.length}</div>
+                        <div class="stat-label">进度</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value score">${gameState.score}</div>
+                        <div class="stat-label">得分</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value time" id="timeDisplay">0s</div>
+                        <div class="stat-label">用时</div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${(currentQuestion / questions.length) * 100}%"></div>
+                </div>
+            `;
+
+            const q = questions[module === 'english' && subModule === 'match' ? 0 : currentQuestion];
+
+            if (module === 'math') {
+                if (subModule === 'compare') {
+                    html += renderCompareQuestion(q);
+                } else {
+                    html += renderCalcQuestion(q);
+                }
+            } else if (module === 'chinese') {
+                if (subModule === 'idiom') html += renderIdiomQuestion(q);
+                else html += renderPoetryQuestion(q);
+            } else if (module === 'english') {
+                if (subModule === 'match') html += renderMatchQuestion(q);
+                else html += renderListenQuestion(q);
+            }
+
+            gameArea.innerHTML = html;
+        }
+
+        // ==================== 渲染题目 ====================
+        function renderCompareQuestion(q) {
+            return `
+                <div class="question-area">
+                    <div class="question-number">第 ${gameState.currentQuestion + 1} 题 - 比大小</div>
+                    <div class="question-text math" style="font-size:28px;">${q.left} &nbsp;?&nbsp; ${q.right}</div>
+                </div>
+                <div class="options">
+                    <button class="option-btn" data-answer=">" onclick="handleCompareClick(this)">大于 (>)</button>
+                    <button class="option-btn" data-answer="=" onclick="handleCompareClick(this)">等于 (=)</button>
+                    <button class="option-btn" data-answer="<" onclick="handleCompareClick(this)">小于 (<)</button>
+                </div>
+            `;
+        }
+
+        function handleCompareClick(btn) {
+            checkAnswer(btn.getAttribute('data-answer'));
+        }
+
+        function renderCalcQuestion(q) {
+            return `
+                <div class="question-area">
+                    <div class="question-number">第 ${gameState.currentQuestion + 1} 题</div>
+                    <div class="question-text math">${q.question}</div>
+                </div>
+                <div class="options">
+                    ${q.options.map(opt => `<button class="option-btn" onclick="checkAnswer(${opt})">${opt}</button>`).join('')}
+                </div>
+            `;
+        }
+
+        function renderIdiomQuestion(q) {
+            return `
+                <div class="question-area">
+                    <div class="question-number">第 ${gameState.currentQuestion + 1} 题 - 成语填词</div>
+                    <div class="question-text" style="font-size:24px;">${q.clue}</div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="idiomInput" placeholder="请输入成语" maxlength="4" onkeypress="if(event.key==='Enter')checkIdiomAnswer()">
+                    <button class="submit-btn" onclick="checkIdiomAnswer()">确定</button>
+                </div>
+            `;
+        }
+
+        function renderPoetryQuestion(q) {
+            return `
+                <div class="question-area">
+                    <div class="question-number">第 ${gameState.currentQuestion + 1} 题 - 诗词补</div>
+                    <div class="question-text" style="font-size:22px;">${q.part === '上句' ? '补下句：' : '补上句：'}</div>
+                    <div class="question-text math" style="font-size:26px;margin-top:15px;">"${q.text}"</div>
+                </div>
+                <div class="input-area">
+                    <input type="text" id="poetryInput" placeholder="请填写答案" onkeypress="if(event.key==='Enter')checkPoetryAnswer()">
+                    <button class="submit-btn" onclick="checkPoetryAnswer()">确定</button>
+                </div>
+            `;
+        }
+
+        function renderMatchQuestion(q) {
+            const pairs = q.pairs;
+            const englishWords = pairs.map(p => p.word).sort(() => Math.random() - 0.5);
+            const chineseWords = pairs.map(p => p.meaning).sort(() => Math.random() - 0.5);
+            const matchedEnglish = gameState.matchedPairs.map(m => m.word);
+            const matchedChinese = gameState.matchedPairs.map(m => m.meaning);
+
+            return `
+                <div class="question-area">
+                    <div class="question-number">单词连连看 - ${gameState.matchedPairs.length}/${pairs.length}</div>
+                </div>
+                <div class="matching-area">
+                    <div class="matching-column">
+                        ${englishWords.map(w => `<div class="matching-item ${matchedEnglish.includes(w) ? 'matched' : ''}" onclick="selectMatchItem('${w}', 'en')">${w}</div>`).join('')}
+                    </div>
+                    <div class="matching-column">
+                        ${chineseWords.map(w => `<div class="matching-item ${matchedChinese.includes(w) ? 'matched' : ''}" onclick="selectMatchItem('${w}', 'zh')">${w}</div>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderListenQuestion(q) {
+            return `
+                <div class="question-area">
+                    <div class="question-number">第 ${gameState.currentQuestion + 1} 题 - 听音选词</div>
+                    <button class="audio-btn" onclick="playAudio('${q.word}')">🔊</button>
+                    <div style="font-size:14px;color:var(--text-light);">点击播放发音</div>
+                </div>
+                <div class="options cols-2">
+                    ${q.options.map(opt => `<button class="option-btn" onclick="checkAnswer('${opt}')">${opt}</button>`).join('')}
+                </div>
+            `;
+        }
+
+        // ==================== 答题逻辑 ====================
+        function checkAnswer(answer) {
+            if (gameState.isAnswered) return;
+            gameState.isAnswered = true;
+
+            const { module, subModule, currentQuestion, questions } = gameState;
+            let correct = false;
+            let correctAnswer = '';
+
+            if (module === 'math') {
+                if (subModule === 'compare') {
+                    const q = questions[currentQuestion];
+                    correctAnswer = q.left > q.right ? '>' : (q.left < q.right ? '<' : '=');
+                    correct = answer === correctAnswer;
+                    const btns = document.querySelectorAll('.option-btn');
+                    btns.forEach(btn => {
+                        btn.classList.add('disabled');
+                        if (btn.getAttribute('data-answer') === correctAnswer) btn.classList.add('correct');
+                        else if (btn.getAttribute('data-answer') === answer && !correct) btn.classList.add('wrong');
+                    });
+                } else {
+                    const q = questions[currentQuestion];
+                    correctAnswer = q.answer;
+                    correct = answer == q.answer;
+                    const btns = document.querySelectorAll('.option-btn');
+                    btns.forEach(btn => {
+                        btn.classList.add('disabled');
+                        if (parseInt(btn.textContent) === correctAnswer) btn.classList.add('correct');
+                        else if (parseInt(btn.textContent) == answer && !correct) btn.classList.add('wrong');
+                    });
+                }
+            } else if (module === 'english' && subModule === 'listen') {
+                const q = questions[currentQuestion];
+                correctAnswer = q.answer;
+                correct = answer === q.answer;
+                const btns = document.querySelectorAll('.option-btn');
+                btns.forEach(btn => {
+                    btn.classList.add('disabled');
+                    if (btn.textContent === correctAnswer) btn.classList.add('correct');
+                    else if (btn.textContent === answer && !correct) btn.classList.add('wrong');
+                });
+            }
+
+            if (correct) { gameState.score += 10; gameState.correctCount++; }
+
+            // 极速跳转下一题 - 100ms
+            setTimeout(() => {
+                gameState.currentQuestion++;
+                gameState.isAnswered = false;
+                renderGame();
+            }, 100);
+        }
+
+        function checkIdiomAnswer() {
+            if (gameState.isAnswered) return;
+            const input = document.getElementById('idiomInput').value.trim();
+            if (!input) return;
+            gameState.isAnswered = true;
+
+            const q = gameState.questions[gameState.currentQuestion];
+            const correct = input === q.answer;
+            if (correct) { gameState.score += 10; gameState.correctCount++; document.getElementById('idiomInput').style.borderColor = 'var(--success)'; }
+            else document.getElementById('idiomInput').style.borderColor = 'var(--error)';
+
+            // 用内联提示替代alert
+            showInlineFeedback(correct, q.answer);
+        }
+
+        function checkPoetryAnswer() {
+            if (gameState.isAnswered) return;
+            const input = document.getElementById('poetryInput').value.trim();
+            if (!input) return;
+            gameState.isAnswered = true;
+
+            const q = gameState.questions[gameState.currentQuestion];
+            const correct = input === q.answer;
+            if (correct) { gameState.score += 10; gameState.correctCount++; document.getElementById('poetryInput').style.borderColor = 'var(--success)'; }
+            else document.getElementById('poetryInput').style.borderColor = 'var(--error)';
+
+            // 用内联提示替代alert
+            showInlineFeedback(correct, q.answer);
+        }
+
+        // 内联反馈提示
+        function showInlineFeedback(correct, answer) {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                padding: 20px 40px; border-radius: 12px; font-size: 18px; font-weight: 700;
+                z-index: 1000; animation: fadeInOut 1s ease forwards;
+                background: ${correct ? 'linear-gradient(135deg, #10B981, #059669)' : 'linear-gradient(135deg, #EF4444, #DC2626)'};
+                color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            `;
+            feedback.textContent = correct ? '✅ 回答正确！' : `❌ 正确：${answer}`;
+            document.body.appendChild(feedback);
+            
+            // 快速跳转
+            setTimeout(() => {
+                feedback.remove();
+                gameState.currentQuestion++;
+                gameState.isAnswered = false;
+                renderGame();
+            }, 500);
+        }
+
+        // 单词连连看
+        let selectedEnglish = null, selectedChinese = null;
+        let lastMatchError = false;
+
+        function selectMatchItem(text, lang) {
+            if (gameState.matchedPairs.some(p => p.word === text || p.meaning === text)) return;
+            if (lastMatchError) return; // 防止快速连续点击
+
+            if (lang === 'en') {
+                selectedEnglish = text;
+                document.querySelectorAll('.matching-column:first-child .matching-item').forEach(el => {
+                    el.classList.remove('selected');
+                    if (el.textContent === text) el.classList.add('selected');
+                });
+            } else {
+                selectedChinese = text;
+                document.querySelectorAll('.matching-column:last-child .matching-item').forEach(el => {
+                    el.classList.remove('selected');
+                    if (el.textContent === text) el.classList.add('selected');
+                });
+            }
+
+            if (selectedEnglish && selectedChinese) {
+                const pairs = gameState.questions[0].pairs;
+                const match = pairs.find(p => p.word === selectedEnglish && p.meaning === selectedChinese);
+                if (match) { 
+                    gameState.matchedPairs.push(match); 
+                    gameState.score += 10; 
+                    gameState.correctCount++; 
+                } else {
+                    // 配错时短暂震动提示
+                    lastMatchError = true;
+                    const items = document.querySelectorAll('.matching-item.selected');
+                    items.forEach(el => {
+                        el.style.animation = 'shake 0.3s ease';
+                        el.style.borderColor = '#EF4444';
+                    });
+                    setTimeout(() => {
+                        lastMatchError = false;
+                        items.forEach(el => {
+                            el.style.animation = '';
+                            el.style.borderColor = '';
+                            el.classList.remove('selected');
+                        });
+                    }, 300);
+                }
+                selectedEnglish = null;
+                selectedChinese = null;
+                // 立即刷新，不需要等待
+                renderGame();
+            }
+        }
+
+        function playAudio(word) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                speechSynthesis.speak(utterance);
+                const btn = document.querySelector('.audio-btn');
+                btn.classList.add('playing');
+                utterance.onend = () => btn.classList.remove('playing');
+            }
+        }
+
+        // ==================== 结果页面 ====================
+        function showResult() {
+            stopTimer();
+            const gameArea = document.getElementById('gameArea');
+            const timeUsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+            const total = gameState.module === 'english' && gameState.subModule === 'match' 
+                ? gameState.questions[0].pairs.length : GAME_CONFIG.totalQuestions;
+            const accuracy = Math.round((gameState.correctCount / total) * 100);
+            const totalScore = calculateTotalScore(gameState.correctCount, total, timeUsed);
+
+            saveToLeaderboard({
+                userName: gameState.userName,
+                module: gameState.module,
+                subModule: gameState.subModule,
+                score: gameState.score,
+                correctCount: gameState.correctCount,
+                totalQuestions: total,
+                accuracy: accuracy,
+                timeUsed: timeUsed,
+                totalScore: totalScore
+            });
+
+            const leaderboard = getFilteredLeaderboard(gameState.module, gameState.subModule);
+            const myRank = leaderboard.findIndex(item => item.userName === gameState.userName) + 1;
+
+            let icon = accuracy >= 90 ? '🏆' : (accuracy >= 70 ? '👏' : (accuracy >= 50 ? '💪' : '📚'));
+            let title = accuracy >= 90 ? '太棒了！' : (accuracy >= 70 ? '不错哦！' : (accuracy >= 50 ? '继续努力！' : '再接再厉！'));
+            const modeName = MODULE_NAMES[`${gameState.module}-${gameState.subModule}`];
+
+            gameArea.innerHTML = `
+                <div class="result-area">
+                    <div class="result-icon">${icon}</div>
+                    <div class="result-title">${title}</div>
+                    <div class="result-score">${totalScore}</div>
+                    <div style="font-size:14px;color:var(--text-light);margin-bottom:5px;">综合得分 = 正确率 + 速度奖励</div>
+                    <div style="font-size:14px;color:var(--text-light);margin-bottom:20px;">得分详情：${accuracy}(正确率) + ${Math.max(0, Math.min(60, (30 - timeUsed) * 2))}(速度奖励)</div>
+                    <div class="result-stats">
+                        <div class="result-stat">
+                            <div class="result-stat-value" style="color:var(--success)">${gameState.correctCount}</div>
+                            <div class="result-stat-label">正确题数</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value" style="color:var(--primary)">${accuracy}</div>
+                            <div class="result-stat-label">正确率(%)</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-value" style="color:var(--warning)">${timeUsed}s</div>
+                            <div class="result-stat-label">用时</div>
+                        </div>
+                    </div>
+                    ${myRank > 0 ? `<div class="my-rank"><div>🎉 你的排名：第 ${myRank} 名</div></div>` : ''}
+                    <div class="result-actions">
+                        <button class="action-btn primary" onclick="startGame()">再来一局</button>
+                        <button class="action-btn" onclick="goHome()">返回首页</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 极速返回首页
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        // 返回按钮点击
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
